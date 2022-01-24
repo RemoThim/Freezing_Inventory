@@ -57,8 +57,40 @@ $(function(){
         });
     });
 })
-function onDeviceReady() {
-    $('main').load('Inventar.html', function(){
+function onDeviceReady() {    
+    /*$('main').load('Inventar.html', function(){
         $.getScript('js/Inventar.js')
-    });
+    });*/
+    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+    db.transaction(populateDB, errorCB, successCB);
+    db-transaction(queryDB);
+}
+function populateDB(tx) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id INTEGER PRIMARY KEY AUTOINCREMENT, name,number)');
+}
+function queryDB(tx) {
+    tx.executeSql('SELECT * FROM DEMO', [], querySuccess, errorCB);
+}
+function querySuccess(tx, results) {
+    var tblText='<table id="t01"><tr><th>ID</th> <th>Name</th> <th>Number</th></tr>';
+    var len = results.rows.length;
+    for (var i = 0; i < len; i++) {
+        var tmpArgs=results.rows.item(i).id + ",'" + results.rows.item(i).name
+                + "','" + results.rows.item(i).number+"'";
+    }
+    tblText +="</table>";
+    document.getElementById("tblDiv").innerHTML =tblText;
+}
+function errorCB(err) {
+    alert("Error processing SQL: "+err.code);
+}
+
+// Transaction success callback
+//
+function successCB() {
+    var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+    db.transaction(queryDB, errorCB);
+}
+function insertDB(tx) {
+    tx.executeSql('INSERT INTO DEMO (name,number) VALUES ("Remo",1)');
 }
