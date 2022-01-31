@@ -31,6 +31,5 @@ function successCB() {
     db.transaction(queryDB, errorCB);
 }
 function insertDB(tx) {
-    //tx.executeSql('INSERT INTO TArtikel (KatID,ArtName,ArtAnz,ArtAblaufdatum) VALUES (1,"Iglo Fischstäbchen",2,"2022-03-15"),(2,"Apfel",2,"2022-10-16")');
-    //tx.executeSql('INSERT INTO TProdukt (ArtID,ProAnz,ProAblaufdatum) VALUES (1,2,"2022-09-16")');
+   // tx.executeSql('INSERT INTO TArtikel (KatID,ArtName,ArtAnz,ArtAblaufdatum) VALUES (1,"Iglo Fischstäbchen",2,"2022-03-15"),(2,"Apfel",2,"2022-10-16")');
 }
