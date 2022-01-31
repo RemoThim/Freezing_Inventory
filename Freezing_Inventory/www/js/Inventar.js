@@ -1,70 +1,36 @@
-function showData() {
-    var ref = firebase.database().ref();
-    ref.on("value", function (response) {
-        // console.log(response.val());
-        // Template in eine Variable speichern
-        var template = $('#template').html();
-        // Template mit Mustache verbinden
-        var html = Mustache.render(template, response.val());
-        // Ausgabe anzeigen 
-        $('#tabelle tbody').html(html);
-        $('.anzeigen').click(function (e) {
-            e.preventDefault();
-            var i = $(this).attr('data-id') - 1;
+var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
+    db.transaction(populateDB);
+    db.transaction(insertDB, errorCB, successCB);
 
-            var latitude = firebase.database().ref('Fahrzeuge/' + i + '/latitude');
-            var longitude = firebase.database().ref('Fahrzeuge/' + i + '/longitude');
-            latitude.on("value", function (snapshot) {
-                latitude = snapshot.val();
-
-            })
-            longitude.on("value", function (snapshot) {
-                longitude = snapshot.val();
-
-            })
-            if (marker != null) {
-                mymap.removeLayer(marker);
-            }
-            mymap.setView([latitude, longitude], 15);
-            marker = L.marker([latitude, longitude]);
-            mymap.addLayer(marker);
-        });
-
-
-    }, function (error) {
-        console.log("Error: " + error.message);
-    });
+function populateDB(tx) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS TKategorie (KatID INTEGER PRIMARY KEY AUTOINCREMENT, Katname)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS TArtikel (ArtID INTEGER PRIMARY KEY AUTOINCREMENT,KatID, ArtName,ArtAnz,ArtAblaufdatum)');
 }
-var marker;
-var onSuccess = function (position) {
-    //console.log();
-    $(window).height()
-    if (marker != null) {
-        mymap.removeLayer(marker);
+function queryDB(tx) {
+    tx.executeSql('SELECT ArtName,ArtAnz,ArtAblaufdatum FROM TArtikel', [], querySuccess, errorCB);
+}
+function querySuccess(tx, results) {
+    var tblText = '<table id="t01" class="table table-striped"><tr><th>Name</th> <th>Anzahl</th> <th>Ablaufdatum</th></tr>';
+    var len = results.rows.length;
+    console.log(len);
+    for (var i = 0; i < len; i++) {
+        //var tmpArgs = results.rows.item(i).ArtName + ",'" + results.rows.item(i).ProAnz + "','" + results.rows.item(i).ProAblaufdatum + "'";
+        tblText += '<tr><td>' + results.rows.item(i).ArtName + '</td><td>' + results.rows.item(i).ArtAnz + '</td><td>' + results.rows.item(i).ArtAblaufdatum + '</td></tr>';
     }
-    mymap.setView([position.coords.latitude, position.coords.longitude], 17);
-    marker = L.marker([position.coords.latitude, position.coords.longitude]);
-    mymap.addLayer(marker);
-    /* alert('Latitude: ' + position.coords.latitude + '\n' +
-        'Longitude: ' + position.coords.longitude + '\n' +
-        'Altitude: ' + position.coords.altitude + '\n' +
-        'Accuracy: ' + position.coords.accuracy + '\n' +
-        'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
-        'Heading: ' + position.coords.heading + '\n' +
-        'Speed: ' + position.coords.speed + '\n' +
-        'Timestamp: ' + position.timestamp + '\n'); */
-};
-showData();
-
-// onError Callback receives a PositionError object
-//
-function onError(error) {
-    alert('code: ' + error.code + '\n' +
-        'message: ' + error.message + '\n');
+    tblText += "</table>";
+    document.getElementById("tabelle").innerHTML = tblText;
 }
-$('#hinzu').click(function (e) {
-    $('main').load('Hinzufuegen.html', function () {
-        $.getScript('js/Hinzufuegen.js')
+function errorCB(err) {
+    alert("Error processing SQL: " + err.code);
+}
 
-    });
-});
+// Transaction success callback
+//
+function successCB() {
+    var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
+    db.transaction(queryDB, errorCB);
+}
+function insertDB(tx) {
+    //tx.executeSql('INSERT INTO TArtikel (KatID,ArtName,ArtAnz,ArtAblaufdatum) VALUES (1,"Iglo Fischstäbchen",2,"2022-03-15"),(2,"Apfel",2,"2022-10-16")');
+    //tx.executeSql('INSERT INTO TProdukt (ArtID,ProAnz,ProAblaufdatum) VALUES (1,2,"2022-09-16")');
+}
