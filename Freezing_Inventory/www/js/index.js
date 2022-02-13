@@ -34,8 +34,8 @@ $(function () {
         });
     });
     $('#s3').click(function (e) {
-        $('main').load('Verwalten.html', function () {
-            $.getScript('js/Verwalten.js')
+        $('main').load('VerwaltenHinzufuegen.html', function () {
+            $.getScript('js/VerwaltenHinzufuegen.js')
 
         });
     });
