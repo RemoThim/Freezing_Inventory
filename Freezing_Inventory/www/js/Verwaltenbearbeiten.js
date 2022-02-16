@@ -1,19 +1,19 @@
 var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
-db.transaction(Loeschen, errorCB);
+db.transaction(select, errorCB);
 db.transaction(queryDB, errorCB);
+db.transaction(Bearbeiten, errorCB);
 var row;
 
-function Loeschen(tx) {
-    tx.executeSql("SELECT ArtName,ArtId,strftime('%d.%m.%Y',ArtAblaufdatum) as ptime FROM TArtikel", [], fillLoeschen, errorCB);
+function select(tx) {
+    tx.executeSql("SELECT ArtName,ArtId,strftime('%d.%m.%Y',ArtAblaufdatum) as ptime FROM TArtikel", [], fillselect, errorCB);
 }
-function fillLoeschen(tx, results) {
-    var VerHtml = '<label><b>Artikel:</b></label><br><select id="select" class="form-select">'
+function fillselect(tx, results) {
+    var VerHtml = '<label><b>Artikel:</b></label><br><select onchange="Bearbeiten()" id="select" class="form-select">'
     var len = results.rows.length;
     for (var i = 0; i < len; i++) {
         VerHtml += "<option value=" + results.rows.item(i).ArtId + ">" + results.rows.item(i).ArtName + " vom " + results.rows.item(i).ptime + "</option>";
     }
-    VerHtml += '</select><br><label><b>Anzahl:</b></label><br><input type="number" id="Anzahl" class="form-control w-25" min="1"><button id="VerbButton" class="btn btn-light" onclick="Verbauch()">Verbrauchen</button>'
-    document.getElementById("Loeschen").innerHTML = VerHtml;
+   document.getElementById("dropdown").innerHTML = VerHtml;
 }
 function errorCB(err) {
     alert("Error processing SQL: " + err.code);
@@ -36,16 +36,12 @@ function querySuccess(tx, results) {
         document.getElementById("table").innerHTML = tblText;
     }
 }
-function Verbauch() {
+function Submit() {
     var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
-    var wert = document.getElementById("Anzahl");
-    if (wert.value < 1) {
-        alert("Die Anzahl muss grössergleich 1 sein!")
-    } else {
-        db.transaction(VerbrauchSQL, errorCB);
-    }
+    db.transaction(VerbrauchSQL, errorCB);
+
 }
-function VerbrauchSQL(tx) {
+function BearbeitenSQL(tx) {
     var auswahl = document.getElementById("select");
     var wert = document.getElementById("Anzahl")
     tx.executeSql("UPDATE TArtikel set ArtAnz = ArtAnz - " + wert.value + " where ArtId = " + auswahl.value, [], queryDB, errorCB);
@@ -57,7 +53,25 @@ function deleteRow(ID) {
 }
 function deleteSelect(tx) {
     tx.executeSql('DELETE FROM TArtikel WHERE ArtId = ' + row, [], queryDB, errorCB)
-    db.transaction(Loeschen, errorCB); 
+    db.transaction(Benutzung, errorCB);
+}
+function Bearbeiten() {
+    var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
+    db.transaction(FillBearbeiten, errorCB);
+}
+function FillBearbeiten(tx) {
+    var selected = document.getElementById("select");
+    tx.executeSql('select * from TArtikel WHERE ArtId = ' + selected.value , [], queryBearbeiten, errorCB)
+}
+function queryBearbeiten(tx,results){
+    var BearbeitenHTML = '<label>Name:</label><input type="text" class="form-control" value="'+ results.rows.item(0).ArtName +'"><br>'
+    BearbeitenHTML += '<label>Anzahl:</label><input type="number" class="form-control" value="'+ results.rows.item(0).ArtAnz +'"><br>'
+    BearbeitenHTML += '<label>Ablaufdatum:</label><input type="date"  value="'+ results.rows.item(0).ArtAblaufdatum +'"><br>'
+    BearbeitenHTML += '<button id="VerbButton" class="btn btn-light" onclick="submit()">Verbrauchen</button>'
+    document.getElementById("Bearbeiten").innerHTML = BearbeitenHTML;
+}
+function submit(){
+
 }
 
 $(function () {
