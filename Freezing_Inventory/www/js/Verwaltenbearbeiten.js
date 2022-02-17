@@ -13,7 +13,7 @@ function fillselect(tx, results) {
     for (var i = 0; i < len; i++) {
         VerHtml += "<option value=" + results.rows.item(i).ArtId + ">" + results.rows.item(i).ArtName + " vom " + results.rows.item(i).ptime + "</option>";
     }
-   document.getElementById("dropdown").innerHTML = VerHtml;
+    document.getElementById("dropdown").innerHTML = VerHtml;
 }
 function errorCB(err) {
     alert("Error processing SQL: " + err.code);
@@ -36,11 +36,6 @@ function querySuccess(tx, results) {
         document.getElementById("table").innerHTML = tblText;
     }
 }
-function Submit() {
-    var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
-    db.transaction(VerbrauchSQL, errorCB);
-
-}
 function BearbeitenSQL(tx) {
     var auswahl = document.getElementById("select");
     var wert = document.getElementById("Anzahl")
@@ -61,17 +56,22 @@ function Bearbeiten() {
 }
 function FillBearbeiten(tx) {
     var selected = document.getElementById("select");
-    tx.executeSql('select * from TArtikel WHERE ArtId = ' + selected.value , [], queryBearbeiten, errorCB)
+    tx.executeSql('select * from TArtikel WHERE ArtId = ' + selected.value, [], queryBearbeiten, errorCB)
 }
-function queryBearbeiten(tx,results){
-    var BearbeitenHTML = '<label>Name:</label><input type="text" class="form-control" value="'+ results.rows.item(0).ArtName +'"><br>'
-    BearbeitenHTML += '<label>Anzahl:</label><input type="number" class="form-control" value="'+ results.rows.item(0).ArtAnz +'"><br>'
-    BearbeitenHTML += '<label>Ablaufdatum:</label><input type="date"  value="'+ results.rows.item(0).ArtAblaufdatum +'"><br>'
+function queryBearbeiten(tx, results) {
+    var BearbeitenHTML = '<label>Name:</label><input type="text" id="BearName" class="form-control" value="' + results.rows.item(0).ArtName + '"><br>'
+    BearbeitenHTML += '<label>Anzahl:</label><input type="number" id="BearAnzahl" class="form-control" value="' + results.rows.item(0).ArtAnz + '"><br>'
+    BearbeitenHTML += '<label>Ablaufdatum:</label><input type="date" id="BearDatum" value="' + results.rows.item(0).ArtAblaufdatum + '"><br>'
     BearbeitenHTML += '<button id="VerbButton" class="btn btn-light" onclick="submit()">Verbrauchen</button>'
     document.getElementById("Bearbeiten").innerHTML = BearbeitenHTML;
 }
-function submit(){
-
+function submit() {
+    var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
+    db.transaction(updateTable, errorCB);
+    db.transaction(select, errorCB);
+}
+function updateTable(tx) {
+    tx.executeSql("UPDATE TArtikel set ArtName =  '" + document.getElementById("BearName").value + "', ArtAnz = '" + document.getElementById("BearAnzahl").value + "', ArtAblaufdatum = '" + document.getElementById("BearDatum").value + "' where ArtId = " + document.getElementById("select").value, [], queryDB, errorCB)
 }
 
 $(function () {
