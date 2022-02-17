@@ -29,6 +29,7 @@ function submit() {
             if (document.getElementById("HinzDatum").value != null) {
                 var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
                 db.transaction(hinzufuegen, errorCB);
+                 
                 
             } else {
                 alert("Bitte geben sie ein Datum ein!");
