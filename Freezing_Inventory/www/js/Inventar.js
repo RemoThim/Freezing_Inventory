@@ -13,7 +13,6 @@ function queryDB(tx) {
     tx.executeSql(select, [], querySuccess, errorCB);
 }
 function querySuccess(tx, results) {
-    console.log(results);
     var tblText = '<table class="table table-striped table-bordered"><thead><tr><th>Name</th> <th>Anzahl</th> <th>Ablaufdatum</th></tr></thead><tbody>';
     var len = results.rows.length;
     for (var i = 0; i < len; i++) {

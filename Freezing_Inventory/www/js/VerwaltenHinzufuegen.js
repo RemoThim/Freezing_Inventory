@@ -1,6 +1,9 @@
 var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
 db.transaction(queryDB, errorCB);
-
+db.transaction(dropdown, errorCB);
+document.getElementById("newKat").style.display = "none";
+document.getElementById("Hinzufuegen").style.display = "block";
+var row;
 function errorCB(err) {
     alert("Error processing SQL: " + err.code);
 }
@@ -19,30 +22,74 @@ function querySuccess(tx, results) {
             }
         }
         tblText += "</tbody></table>";
-        document.getElementById("table").innerHTML = tblText;
+        document.getElementById("hinztable").innerHTML = tblText;
+    }
+}
+function changeHtml() {
+    if (document.getElementById("select").value == -1) {
+        document.getElementById("Hinzufuegen").style.display = "none";
+        document.getElementById("newKat").style.display = "block";
+    } else {
+        document.getElementById("newKat").style.display = "none";
+        document.getElementById("Hinzufuegen").style.display = "block";
     }
 }
 function submit() {
-    console.log(document.getElementById("HinzName").value);
-    if (document.getElementById("HinzName").value != null) {
-        if (document.getElementById("HinzAnz").value != null) {
-            if (document.getElementById("HinzDatum").value != null) {
-                var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
-                db.transaction(hinzufuegen, errorCB);
-                 
-                
+    if (document.getElementById("select").value >= 1) {
+        if (document.getElementById("HinzName").value != "") {
+            if (document.getElementById("HinzAnz").value != "") {
+                if (document.getElementById("HinzDatum").value != "") {
+                    var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
+                    db.transaction(hinzufuegen, errorCB);
+
+
+                } else {
+                    alert("Bitte geben sie ein Datum ein!");
+                }
             } else {
-                alert("Bitte geben sie ein Datum ein!");
+                alert("Bitte geben sie einen Anzahl ein!");
             }
         } else {
-            alert("Bitte geben sie einen Anzahl ein!");
+            alert("Bitte geben sie einen Namen ein!");
         }
     } else {
-        alert("Bitte geben sie einen Namen ein!");
+        alert("Bitte wählen sie eine Kategorie!");
     }
 }
 function hinzufuegen(tx) {
-    tx.executeSql("INSERT INTO TArtikel  (KatID,ArtName,ArtAnz,ArtAblaufdatum) VALUES (1,'" + document.getElementById("HinzName").value + "','" + document.getElementById("HinzAnz").value + "','" + document.getElementById("HinzDatum").value + "')", [], queryDB, errorCB);
+    tx.executeSql("INSERT INTO TArtikel  (KatID,ArtName,ArtAnz,ArtAblaufdatum) VALUES (" + document.getElementById("select").value + ",'" + document.getElementById("HinzName").value + "','" + document.getElementById("HinzAnz").value + "','" + document.getElementById("HinzDatum").value + "')", [], queryDB, errorCB);
+}
+function NewKat() {
+    if (document.getElementById("neueKat").value != "") {
+        var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
+        db.transaction(newKatSQL, errorCB);
+    } else {
+        alert("Bitte Name für neue Kategorie eingeben!")
+    }
+
+}
+function newKatSQL(tx) {
+    tx.executeSql('INSERT INTO TKategorie (KatName) VALUES ("'+document.getElementById("neueKat").value+'")',[],dropdown, errorCB)
+}
+function deleteRow(ID) {
+    row = ID;
+    var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
+    db.transaction(deleteSelect, errorCB);
+}
+function deleteSelect(tx) {
+    tx.executeSql('DELETE FROM TArtikel WHERE ArtId = ' + row, [], queryDB, errorCB)
+}
+function dropdown(tx) {
+    tx.executeSql('Select * from TKategorie', [], filldropdown, errorCB);
+}
+function filldropdown(tx, results) {
+    var dropHtml = '<label><b>Kategorie:</b></label><br><select onchange="changeHtml()" class="form-select w-50" id="select"><option>alle</option><option value=-1>Neue Kategorie</option>'
+    var len = results.rows.length;
+    for (var i = 0; i < len; i++) {
+        dropHtml += "<option value=" + results.rows.item(i).KatId + ">" + results.rows.item(i).KatName + "</option>";
+    }
+    dropHtml += '</select>'
+    document.getElementById("dropdown").innerHTML = dropHtml;
 }
 $(function () {
     $('#s1').click(function (e) {
