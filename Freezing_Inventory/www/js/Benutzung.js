@@ -57,5 +57,5 @@ function deleteRow(ID) {
 }
 function deleteSelect(tx) {
     tx.executeSql('DELETE FROM TArtikel WHERE ArtId = ' + row, [], queryDB, errorCB)
-    db.transaction(Benutzung, errorCB); 
+    db.transaction(Benutzung, errorCB);
 }

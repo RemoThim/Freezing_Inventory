@@ -1,5 +1,5 @@
 var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
-db.transaction(populateDB);
+db.transaction(populateDB, insertDB, errorCB);
 var select = "SELECT ArtName,ArtAnz,strftime('%d.%m.%Y',ArtAblaufdatum) as ptime FROM TArtikel";
 db.transaction( queryDB, errorCB ,successCB);
 db.transaction(dropdown, errorCB);
@@ -32,8 +32,8 @@ function successCB() {
     db.transaction(queryDB, errorCB);
 }
 function insertDB(tx) {
-    //tx.executeSql('INSERT INTO TKategorie (KatId,KatName) VALUES (1,"Fleisch"),(2,"Obst")');
-   tx.executeSql('INSERT INTO TArtikel (KatID,ArtName,ArtAnz,ArtAblaufdatum) VALUES (1,"Iglo Fischstäbchen",2,"2022-03-15"),(2,"Apfel",2,"2022-10-16")');
+   tx.executeSql('INSERT INTO TKategorie (KatId,KatName) VALUES (1,"Fisch"),(2,"Obst")');
+   tx.executeSql('INSERT INTO TArtikel (KatID,ArtName,ArtAnz,ArtAblaufdatum) VALUES (1,"Iglo Fischstäbchen",2,"2022-10-15"),(2,"Apfel",2,"2022-10-16")');
 }
 
 function dropdown(tx) {
