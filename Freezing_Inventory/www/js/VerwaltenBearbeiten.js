@@ -62,7 +62,7 @@ function queryBearbeiten(tx, results) {
     var BearbeitenHTML = '<label>Name:</label><input type="text" id="BearName" class="form-control" value="' + results.rows.item(0).ArtName + '"><br>'
     BearbeitenHTML += '<label>Anzahl:</label><input type="number" id="BearAnzahl" class="form-control" value="' + results.rows.item(0).ArtAnz + '"><br>'
     BearbeitenHTML += '<label>Ablaufdatum:</label><input type="date" id="BearDatum" value="' + results.rows.item(0).ArtAblaufdatum + '"><br>'
-    BearbeitenHTML += '<button id="VerbButton" class="btn btn-light" onclick="submit()">Verbrauchen</button>'
+    BearbeitenHTML += '<button id="VerbButton" class="btn btn-light" onclick="submit()">Speichern</button>'
     document.getElementById("Bearbeiten").innerHTML = BearbeitenHTML;
 }
 function submit() {
