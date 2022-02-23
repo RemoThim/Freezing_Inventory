@@ -50,7 +50,6 @@ function filldropdown(tx, results) {
 }
 function KatWahl(selectObject, tx) {
     var Auswahl = selectObject.value;
-    console.log(Auswahl);
     if (Auswahl == 0) {
         select = "SELECT ArtName,ArtAnz,strftime('%d.%m.%Y',ArtAblaufdatum) as ptime FROM TArtikel";
     } else {
