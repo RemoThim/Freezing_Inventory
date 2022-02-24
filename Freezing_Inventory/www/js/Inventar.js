@@ -3,7 +3,6 @@ db.transaction(populateDB, errorCB);
 var select = "SELECT ArtName,ArtAnz,strftime('%d.%m.%Y',ArtAblaufdatum) as ptime FROM TArtikel";
 db.transaction( queryDB, errorCB ,successCB);
 db.transaction(dropdown, errorCB);
-db.transaction(checkAblaufdatum, errorCB);
 
 
 function populateDB(tx) {

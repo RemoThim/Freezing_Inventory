@@ -12,7 +12,7 @@ function fillLoeschen(tx, results) {
     for (var i = 0; i < len; i++) {
         VerHtml += "<option value=" + results.rows.item(i).ArtId + ">" + results.rows.item(i).ArtName + " vom " + results.rows.item(i).ptime + "</option>";
     }
-    VerHtml += '</select><br><label><b>Anzahl:</b></label><br><input type="number" id="Anzahl" class="form-control w-25" min="1"><button id="VerbButton" class="btn btn-light" onclick="Verbauch()">Verbrauchen</button>'
+    VerHtml += '</select><br><label><b>Anzahl:</b></label><br><input type="number" id="Anzahl" class="form-control w-25" min="1"><button id="VerbButton" class="btn btn-light" onclick="Verbauch()">Löschen</button>'
     document.getElementById("Loeschen").innerHTML = VerHtml;
 }
 function errorCB(err) {
