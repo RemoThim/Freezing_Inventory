@@ -59,6 +59,7 @@ function hinzufuegen(tx) {
     document.getElementById("select").value = 0;
     document.getElementById("HinzName").value = "";
     document.getElementById("HinzAnz").value = "";
+    document.getElementById("HinzDatum").value = "";
     alert("Artikel Hinzugefügt!");
 }
 function NewKat() {

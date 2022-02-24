@@ -6,6 +6,5 @@
         Remo Thim
     </author>
     <content src="index.html" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
+    <icon src="img/Freezing_Inventory_icon.png"/>
 </widget>
