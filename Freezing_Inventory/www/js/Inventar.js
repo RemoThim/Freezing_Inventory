@@ -3,6 +3,7 @@ db.transaction(populateDB, errorCB);
 var select = "SELECT ArtName,ArtAnz,strftime('%d.%m.%Y',ArtAblaufdatum) as ptime FROM TArtikel";
 db.transaction( queryDB, errorCB ,successCB);
 db.transaction(dropdown, errorCB);
+db.transaction(checkAblaufdatum, errorCB);
 
 
 function populateDB(tx) {
@@ -45,7 +46,7 @@ function filldropdown(tx, results) {
     for (var i = 0; i < len; i++) {
         dropHtml += "<option value=" + results.rows.item(i).KatId + ">" + results.rows.item(i).KatName + "</option>";
     }
-    dropHtml += '</select>'
+    dropHtml += '</select><button id="Warnungen" class="btn" onclick="ablaufcheck()">Warnungen</button>'
     document.getElementById("dropdown").innerHTML = dropHtml;
 }
 function KatWahl(selectObject, tx) {
@@ -59,4 +60,30 @@ function KatWahl(selectObject, tx) {
 }
 function KatAnzeige(tx) {
     tx.executeSql(select, [], querySuccess, errorCB);
+}
+function ablaufcheck(){
+    db.transaction(checkAblaufdatum, errorCB);
+}
+function checkAblaufdatum(tx) {
+    tx.executeSql("SELECT ArtName,ArtId,ArtAblaufdatum,strftime('%d.%m.%Y',ArtAblaufdatum) as ptime FROM TArtikel", [], alertablauf, errorCB);
+}
+function alertablauf(tx, results) {
+    var len = results.rows.length;
+    var d1 = new Date();
+    var d2;
+    var alarmtext = "Folgende Produkte könnten abgelaufen sein:\n";
+    var abgelaufen = false;
+    for (var i = 0; i < len; i++) {
+        d2 = new Date(results.rows.item(i).ArtAblaufdatum)
+        if (d1 >= d2) {
+            abgelaufen = true;
+            alarmtext +=  results.rows.item(i).ArtName +" vom " + results.rows.item(i).ptime + "\n"
+        }
+    }
+    if (abgelaufen == true){
+        alert(alarmtext);
+    }
+}
+function errorCB(err) {
+    alert("Error processing SQL: " + err.code);
 }

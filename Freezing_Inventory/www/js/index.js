@@ -44,29 +44,5 @@ function onDeviceReady() {
     $('main').load('Inventar.html', function () {
         $.getScript('js/Inventar.js')
     });
-    var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
-    db.transaction(checkAblaufdatum, errorCB);
-}
-function checkAblaufdatum(tx) {
-    tx.executeSql("SELECT ArtName,ArtId,ArtAblaufdatum,strftime('%d.%m.%Y',ArtAblaufdatum) as ptime FROM TArtikel", [], alertablauf, errorCB);
-}
-function alertablauf(tx, results) {
-    var len = results.rows.length;
-    var d1 = new Date();
-    var d2;
-    var alarmtext = "Folgende Produkte könnten abgelaufen sein:\n";
-    var abgelaufen = false;
-    for (var i = 0; i < len; i++) {
-        d2 = new Date(results.rows.item(i).ArtAblaufdatum)
-        if (d1 >= d2) {
-            abgelaufen = true;
-            alarmtext +=  results.rows.item(i).ArtName +" vom " + results.rows.item(i).ptime + "\n"
-        }
-    }
-    if (abgelaufen == true){
-        alert(alarmtext);
-    }
-}
-function errorCB(err) {
-    alert("Error processing SQL: " + err.code);
+
 }

@@ -1,7 +1,7 @@
 table {
     display: flex;
     flex-flow: column;
-    height: 80vh;
+    height: 70vh;
     padding-top: 2vh;
 }
 
@@ -37,4 +37,9 @@ table thead, table tbody tr {
     height: 59.3vh;
     width: 100%;
     padding-top: 2vh;
+}
+#Warnungen
+{
+    margin-top: 1vh;
+    background-color: rgb(255, 52, 45);
 }
