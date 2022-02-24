@@ -42,7 +42,7 @@ function Verbauch() {
     if (wert.value < 1) {
         alert("Die Anzahl muss grössergleich 1 sein!")
     } else {
-        db.transaction(VerbrauchSQL, errorCB);
+        db.transaction(VerbrauchSQL, errorCB);  
     }
 }
 function VerbrauchSQL(tx) {

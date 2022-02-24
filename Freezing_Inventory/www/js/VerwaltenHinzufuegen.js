@@ -41,8 +41,6 @@ function submit() {
                 if (document.getElementById("HinzDatum").value != "") {
                     var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
                     db.transaction(hinzufuegen, errorCB);
-
-
                 } else {
                     alert("Bitte geben sie ein Datum ein!");
                 }
@@ -58,6 +56,10 @@ function submit() {
 }
 function hinzufuegen(tx) {
     tx.executeSql("INSERT INTO TArtikel  (KatID,ArtName,ArtAnz,ArtAblaufdatum) VALUES (" + document.getElementById("select").value + ",'" + document.getElementById("HinzName").value + "','" + document.getElementById("HinzAnz").value + "','" + document.getElementById("HinzDatum").value + "')", [], queryDB, errorCB);
+    document.getElementById("select").value = 0;
+    document.getElementById("HinzName").value = "";
+    document.getElementById("HinzAnz").value = "";
+    alert("Artikel Hinzugefügt!");
 }
 function NewKat() {
     if (document.getElementById("neueKat").value != "") {
