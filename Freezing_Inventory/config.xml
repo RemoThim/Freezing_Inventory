@@ -6,5 +6,5 @@
         Remo Thim
     </author>
     <content src="index.html" />
-    <icon src="img/Freezing_Inventory_icon.png"/>
+    <icon src="www/img/Freezing_Inventory_icon.png"/>
 </widget>

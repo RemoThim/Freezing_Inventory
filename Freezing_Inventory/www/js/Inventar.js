@@ -1,5 +1,5 @@
 var db = window.openDatabase("Inventory", "1.0", "Inventory", 200000);
-db.transaction(populateDB, insertDB, errorCB);
+db.transaction(populateDB, errorCB);
 var select = "SELECT ArtName,ArtAnz,strftime('%d.%m.%Y',ArtAblaufdatum) as ptime FROM TArtikel";
 db.transaction( queryDB, errorCB ,successCB);
 db.transaction(dropdown, errorCB);
