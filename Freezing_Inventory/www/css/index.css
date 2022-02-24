@@ -1,0 +1,45 @@
+table {
+    display: flex;
+    flex-flow: column;
+    height: 70vh;
+    padding-top: 2vh;
+}
+
+table thead {
+    /* head takes the height it requires, 
+    and it's not scaled when table is resized */
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+table tbody {
+    /* body takes all the remaining available space */
+    flex: 1 1 auto;
+    display: block;
+    overflow-y: scroll;
+}
+
+table tbody tr {
+    width: 100%;
+}
+
+table thead, table tbody tr {
+    display: table;
+    table-layout: fixed;
+}
+#VerbButton{
+    margin-top: 1vh;
+    background-color: rgb(45, 143, 255);
+}
+#info{
+    display: flex;
+    flex-flow: column;
+    height: 59.3vh;
+    width: 100%;
+    padding-top: 2vh;
+}
+#Warnungen
+{
+    margin-top: 1vh;
+    background-color: rgb(255, 52, 45);
+}

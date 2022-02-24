@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="io.cordova.hellocordova" version="1.0.0">
+    <name>Freezing Inventory</name>
+    <description>An App which allows one to manage one's Freezer and Fridge</description>
+    <author email="Remo.Thim@outlook.com" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+        Remo Thim
+    </author>
+    <content src="index.html" />
+    <icon src="www/img/Freezing_Inventory_icon.png"/>
+</widget>
